@@ -91,6 +91,8 @@ class Standby(Screen):
 			self.avswitch.setInput("SCART")
 		else:
 			self.avswitch.setInput("AUX")
+		if os.path.exists("/proc/stb/hdmi/output"):
+			open("/proc/stb/hdmi/output", "w").write("off")
 
 		gotoShutdownTime = int(config.usage.standby_to_shutdown_timer.value)
 		if gotoShutdownTime:
@@ -134,7 +136,8 @@ class Standby(Screen):
 			Console().ePopen("/usr/script/standby_leave.sh")
 		if config.usage.remote_fallback_import_standby.value:
 			ImportChannels()
-
+		if os.path.exists("/proc/stb/hdmi/output"):
+			open("/proc/stb/hdmi/output", "w").write("on")
 	def __onFirstExecBegin(self):
 		global inStandby
 		inStandby = self
